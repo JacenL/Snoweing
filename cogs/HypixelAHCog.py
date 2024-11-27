@@ -142,7 +142,7 @@ class HypixelAHCog(commands.Cog):
             for item in auctions[uuid]:
                 embed.add_field(
                     name=item['name'], 
-                    value=f"Price: `{{:,}}`.format(item['price'])`\nTime Left: `{item['time'] // 3600}h {(item['time'] % 3600) // 60}m {item['time'] % 60}s`\nType: `{item['type']}`", 
+                    value=f"Price: `{item['price']:,}`\nTime Left: `{item['time'] // 3600}h {(item['time'] % 3600) // 60}m {item['time'] % 60}s`\nType: `{item['type']}`", 
                     inline=False
                 )
         await ctx.reply(embed=embed)
