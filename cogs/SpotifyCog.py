@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
-    client_id=os.getenv("spotifyClientId"),
+    client_id=os.getenv("spotifyClientID"),
     client_secret=os.getenv("spotifyClientSecret"),
     redirect_uri="http://localhost:8888/callback",
     scope="playlist-read-private"
