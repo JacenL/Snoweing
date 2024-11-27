@@ -12,7 +12,7 @@ cache_file = "cache/ah_cache.json"
 class HypixelAHCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.hypixelAPIKey = os.getenv("hypixelAPIKeyBasic")
+        self.hypixelAPIKey = os.getenv("hypixelAPIKeyDev")
         self.channelID = 1185353211482222786
         self.trackedAuctions = {}
 
@@ -142,11 +142,10 @@ class HypixelAHCog(commands.Cog):
             for item in auctions[uuid]:
                 embed.add_field(
                     name=item['name'], 
-                    value=f"Price: `{{:,}}`.format(item['price'])`\nTime Left: `{item['time'] // 3600}h {(item['time'] % 3600) // 60}m {item['time'] % 60}s`\nType: `{item['type']}`", 
+                    value=f"Price: `{item['price']:,}`\nTime Left: `{item['time'] // 3600}h {(item['time'] % 3600) // 60}m {item['time'] % 60}s`\nType: `{item['type']}`", 
                     inline=False
                 )
         await ctx.reply(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(HypixelAHCog(bot))
-

@@ -11,7 +11,7 @@ class HypixelPlayerCog(commands.Cog):
         self.trackedPlayers = {}
         self.autoTrackedPlayers = {"lceing"}
         self.dailyPlaytime = {}
-        self.hypixelAPIKey = os.getenv("hypixelAPIKeyBasic")
+        self.hypixelAPIKey = os.getenv("hypixelAPIKeyDev")
         self.channelID = 1185353211482222786
         self.author = bot.get_user(535893497388204047)
         self.check_logins.start()
