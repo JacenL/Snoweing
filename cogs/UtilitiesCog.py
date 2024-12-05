@@ -37,5 +37,19 @@ class UtilitiesCog(commands.Cog):
         await ctx.reply("dying...dead")
         await self.bot.close()
 
+    @commands.command()
+    async def message(self, ctx, username, *, message):
+        if username == None:
+            embed = discord.Embed("Please provide a username", color=discord.Color.red)
+            await ctx.reply(embed=embed)
+        for member in ctx.guild.members:
+            if member.name == username:
+                await ctx.guild.get_member_named(username).send(message)
+                embed = discord.Embed(title=f"Sent message to {username}.", color=discord.Color.red)
+                await ctx.reply(embed=embed)
+                return
+        embed = discord.Embed(title=f"User {username} not found.", color=discord.Color.red)
+        await ctx.reply(embed=embed)
+
 async def setup(bot):
     await bot.add_cog(UtilitiesCog(bot))
