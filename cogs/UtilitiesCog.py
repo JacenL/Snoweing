@@ -39,17 +39,38 @@ class UtilitiesCog(commands.Cog):
 
     @commands.command()
     async def message(self, ctx, username, *, message):
-        if username == None:
-            embed = discord.Embed("Please provide a username", color=discord.Color.red)
+        if not username or not message:
+            embed = discord.Embed(title=f"Error", description=f"Please provide a username.", color=discord.Color.red)
             await ctx.reply(embed=embed)
-        for member in ctx.guild.members:
-            if member.name == username:
-                await ctx.guild.get_member_named(username).send(message)
-                embed = discord.Embed(title=f"Sent message to {username}.", color=discord.Color.red)
+            return
+        member = discord.utils.get(ctx.guild.members, name=username)
+        if not member:
+            member = discord.utils.get(ctx.guild.members, display_name=username)
+        if member:
+            try:
+                await member.send(message)
+                embed = discord.Embed(title="Success", description=f"Sent message to {username}.", color=discord.Color.green)
                 await ctx.reply(embed=embed)
-                return
-        embed = discord.Embed(title=f"User {username} not found.", color=discord.Color.red)
+            except discord.errors.Forbidden:
+                embed = discord.Embed(title=f"Error", description=f"Could not send message to {username}. They may have DMs disabled.", color=discord.Color.red)
+                await ctx.reply(embed=embed)
+            return
+        embed = discord.Embed(title=f"Error", description=f"User {username} not found.", color=discord.Color.red)
         await ctx.reply(embed=embed)
+    
+    @commands.command()
+    async def messageping(self, ctx, member:discord.Member, *, message):
+        if not message:
+            embed = discord.Embed(title=f"Error", description=f"Please type in a message.", color=discord.Color.red)
+            await ctx.reply(embed=embed)
+            return
+        try:
+            await member.send(message)
+            embed = discord.Embed(title="Success", description=f"Sent message to {member.mention}.", color=discord.Color.green)
+            await ctx.reply(embed=embed)
+        except discord.errors.Forbidden:
+            embed = discord.Embed(title=f"Error", description=f"Could not send message to {member.mention}. They may have DMs disabled.", color=discord.Color.red)
+            await ctx.reply(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(UtilitiesCog(bot))
