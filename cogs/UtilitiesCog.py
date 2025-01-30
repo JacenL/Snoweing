@@ -78,18 +78,20 @@ class UtilitiesCog(commands.Cog):
     async def day(self, ctx):
         url = 'https://www.mbhs.edu'
         try:
+            await ctx.send("Loading...1")
             response = requests.get(url)
             if response.status_code == 200:
+                await ctx.send("Loading...2")
                 result = re.search(r"\bTomorrow is an (?:ODD|EVEN) day\b", str(response.text))
-                dayString = str(result.group())
-                embed = discord.Embed(title="Day", description=f"{dayString}", color=discord.Color.green)
-                await ctx.reply(embed=embed)
+                await ctx.send("Loading...3")
+                print(result.group())
+                embed = discord.Embed(title="Day", description=f"{result.group()}", color=discord.Color.green)
+                await ctx.send("Loading...4")
             else:
                 embed = discord.Embed(title="Error", description=f"Could not get data from {url}.", color=discord.Color.red)
-                await ctx.reply(embed=embed)
-        except:
+        except Exception:
             embed = discord.Embed(title="Error", description=f"Something really bad happened.", color=discord.Color.red)
-            await ctx.reply(embed=embed)
+        await ctx.reply(embed=embed)
 
 
 async def setup(bot):
