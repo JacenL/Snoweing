@@ -2,6 +2,8 @@ import discord
 from discord.ext import commands
 import random
 import asyncio
+import requests
+import re
 
 class UtilitiesCog(commands.Cog):
     def __init__(self, bot):
@@ -71,6 +73,24 @@ class UtilitiesCog(commands.Cog):
         except discord.errors.Forbidden:
             embed = discord.Embed(title=f"Error", description=f"Could not send message to {member.mention}. They may have DMs disabled.", color=discord.Color.red)
             await ctx.reply(embed=embed)
+
+    @commands.command()
+    async def day(self, ctx):
+        url = 'https://www.mbhs.edu'
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                result = re.search(r"\bTomorrow is an (?:ODD|EVEN) day\b", str(response.text))
+                dayString = str(result.group())
+                embed = discord.Embed(title="Day", description=f"{dayString}", color=discord.Color.green)
+                await ctx.reply(embed=embed)
+            else:
+                embed = discord.Embed(title="Error", description=f"Could not get data from {url}.", color=discord.Color.red)
+                await ctx.reply(embed=embed)
+        except:
+            embed = discord.Embed(title="Error", description=f"Something really bad happened.", color=discord.Color.red)
+            await ctx.reply(embed=embed)
+
 
 async def setup(bot):
     await bot.add_cog(UtilitiesCog(bot))
