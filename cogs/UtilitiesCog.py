@@ -75,7 +75,7 @@ class UtilitiesCog(commands.Cog):
         try:
             response = requests.get(url)
             if response.status_code == 200:
-                result = re.search(r"\b(?:Today|Tomorrow) is an (?:ODD|EVEN) day\b", str(response.text))
+                result = re.search(r"\b(?:Today|Tomorrow|\w+, \w+ \d+) (?:is|will be) an (?:ODD|EVEN) day\b", response.text)
                 embed = discord.Embed(title="Day", description=f"{result.group()}", color=discord.Color.green())
             else:
                 embed = discord.Embed(title="Error", description=f"Could not get data from {url}.", color=discord.Color.red())
