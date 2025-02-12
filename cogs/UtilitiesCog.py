@@ -110,11 +110,14 @@ class UtilitiesCog(commands.Cog):
                     result = "an **ODD**"
                 elif oddeven == "0":
                     result = "an **EVEN**"
+                elif oddeven == "2":
+                    result = "a no school"
                 elif oddeven == "5":
-                    result = "a weekend or no school"
+                    embed = discord.Embed(title="Day", description=f"{dateKey} is {result} day.", color=discord.Color.green())
                 else:
                     result = "an unknown (error)"
-                embed = discord.Embed(title="Day", description=f"{dateKey} is {result} day.", color=discord.Color.green())
+                if oddeven != "5":
+                    embed = discord.Embed(title="Day", description=f"{dateKey} is {result} day.", color=discord.Color.green())
             else:
                 embed = discord.Embed(title="Error", description=f"Could not determine ODD/EVEN for{date}.", color=discord.Color.red())
         except Exception as e:
