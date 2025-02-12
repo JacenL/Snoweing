@@ -22,6 +22,7 @@ class UtilitiesCog(commands.Cog):
         await ctx.reply(embed=embed)
 
     @commands.command()
+    @commands.has_guild_permissions(manage_messages=True)
     async def clear(self, ctx, amount = 0):
         await ctx.channel.purge(limit = amount+1)
         embed = discord.Embed(title=f"Cleared {amount} Messages", color=discord.Color.green())
