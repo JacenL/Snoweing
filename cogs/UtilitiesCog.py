@@ -27,6 +27,15 @@ class UtilitiesCog(commands.Cog):
         await ctx.channel.purge(limit = amount+1)
         embed = discord.Embed(title=f"Cleared {amount} Messages", color=discord.Color.green())
         await ctx.send(embed=embed)
+    
+    @clear.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            embed = discord.Embed(title="No Perms >:D", color=discord.Color.blue())
+            await ctx.reply(embed=embed)
+        else:
+            embed = discord.Embed(title="You idiot you typed the command wrong", color=discord.Color.blue())
+            await ctx.reply(embed=embed)
 
     @commands.command()
     async def coinflip(self, ctx):
