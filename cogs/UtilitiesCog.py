@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from datetime import datetime
 import random
 import asyncio
 import requests
@@ -70,17 +71,43 @@ class UtilitiesCog(commands.Cog):
             await ctx.reply(embed=embed)
 
     @commands.command()
-    async def day(self, ctx):
-        url = 'https://www.mbhs.edu'
+    async def day(self, ctx, date: str = None):
+        url = 'https://mbhs.edu/calendar/evenodd'
         try:
             response = requests.get(url)
-            if response.status_code == 200:
-                result = re.search(r"\b(?:Today|Tomorrow|\w+, \w+ \d+) (?:is|will be) an (?:ODD|EVEN) day\b", response.text)
-                embed = discord.Embed(title="Day", description=f"{result.group()}", color=discord.Color.green())
+            if response.status_code != 200:
+                raise Exception("Failed to fetch the webpage.")
+            if date:
+                try:
+                    dateObj = datetime.strptime(date, '%m/%d/%y')
+                except ValueError:
+                    embed = discord.Embed(title="Error", description=f"Invalid date format. Use the format mm/dd/yy.", color=discord.Color.red())
+                    await ctx.reply(embed=embed)
+                    return
             else:
-                embed = discord.Embed(title="Error", description=f"Could not get data from {url}.", color=discord.Color.red())
-        except Exception:
-            embed = discord.Embed(title="Error", description=f"Something really bad happened.", color=discord.Color.red())
+                dateObj = datetime.today()
+            dateKey = dateObj.strftime('%a %b %d %Y')
+            dateLoc = response.text.find(dateKey)
+            if dateLoc == -1:
+                embed = discord.Embed(title="Day", description=f"No school on {dateKey}.", color=discord.Color.green())
+                await ctx.reply(embed=embed)
+                return
+            match = re.search(rf"{dateKey}\"\s*:\s*(\d)", response.text[dateLoc:])
+            if match:
+                oddeven = match.group(1)
+                if oddeven == "1":
+                    result = "an **ODD**"
+                elif oddeven == "0":
+                    result = "an **EVEN**"
+                elif oddeven == "5":
+                    result = "a weekend or no school"
+                else:
+                    result = "an unknown (error)"
+                embed = discord.Embed(title="Day", description=f"{dateKey} is {result} day.", color=discord.Color.green())
+            else:
+                embed = discord.Embed(title="Error", description=f"Could not determine ODD/EVEN for{date}.", color=discord.Color.red())
+        except Exception as e:
+            embed = discord.Embed(title="Error", description=f"Could not fetch response from {url}.", color=discord.Color.red())
         await ctx.reply(embed=embed)
 
     @commands.command()
