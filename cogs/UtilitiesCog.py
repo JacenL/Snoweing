@@ -9,6 +9,7 @@ import re
 class UtilitiesCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.ownerID = 535893497388204047
 
     @commands.command()
     async def ping(self, ctx):
@@ -122,8 +123,25 @@ class UtilitiesCog(commands.Cog):
 
     @commands.command()
     async def die(self, ctx):
-        await ctx.reply("dying...dead")
-        await self.bot.close()
+        if ctx.author.id == self.ownerID:
+            embed = discord.Embed(title="Shutdown", description="Dying...dead", color=discord.Color.green())
+            await ctx.reply(embed=embed)
+            await self.bot.close()
+        else:
+            responses = [
+                "no",
+                "you too",
+                "nah, i'd win",
+                "dying...still alive",
+                "dying...jk",
+                "1v1 me",
+                "the duck walked up to the lemonade stand",
+                "its raining tacos from out of the sky",
+                "living...alive"
+            ]
+            response = random.choice(responses)
+            embed = discord.Embed(title=response, color=discord.Color.green())
+            await ctx.reply(embed=embed)
 
 
 async def setup(bot):
