@@ -113,7 +113,7 @@ class UtilitiesCog(commands.Cog):
                 elif oddeven == "2":
                     result = "a no school"
                 elif oddeven == "5":
-                    embed = discord.Embed(title="Day", description=f"{dateKey} is {result} day.", color=discord.Color.green())
+                    embed = discord.Embed(title="Day", description=f"{dateKey} is weekend.", color=discord.Color.green())
                 else:
                     result = "an unknown (error)"
                 if oddeven != "5":
