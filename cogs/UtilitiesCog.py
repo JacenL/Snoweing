@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 import asyncio
 import requests
@@ -92,11 +92,14 @@ class UtilitiesCog(commands.Cog):
                 try:
                     dateObj = datetime.strptime(date, '%m/%d/%y')
                 except ValueError:
-                    embed = discord.Embed(title="Error", description=f"Invalid date format. Use the format mm/dd/yy.", color=discord.Color.red())
+                    embed = discord.Embed(title="Error", description=f"Invalid date. Use the format mm/dd/yy or enter a valid date.", color=discord.Color.red())
                     await ctx.reply(embed=embed)
                     return
             else:
-                dateObj = datetime.today()
+                if datetime.now().hour >= 12:
+                    dateObj = datetime.today().date() + timedelta(days=1)
+                else:
+                    dateObj = datetime.today()
             dateKey = dateObj.strftime('%a %b %d %Y')
             dateLoc = response.text.find(dateKey)
             if dateLoc == -1:
