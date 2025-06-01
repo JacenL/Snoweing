@@ -34,12 +34,14 @@ class SpotifyCog(commands.Cog):
                     break
             if found:
                 matchingPlaylists.append(playlist)
+                print(matchingPlaylists)
         return matchingPlaylists
 
     @commands.command()
     async def playlist(self, ctx, *, playlistName: str):
         try:
             playlists = self.searchPlaylist(playlistName)
+            print(playlists)
             if playlists == []:
                 embed = discord.Embed(title=f"**Error**", description=f"No playlists found with the name '{playlistName}'.", color=discord.Color.red())
                 await ctx.reply(embed=embed)
