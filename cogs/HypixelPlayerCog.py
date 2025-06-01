@@ -74,7 +74,7 @@ class HypixelPlayerCog(commands.Cog):
                 return data['session']['online'], data['session'].get('gameType')
         return None, None
 
-    @tasks.loop(seconds=30)
+    @tasks.loop(seconds=5)
     async def check_logins(self):
         for uuid, info in self.trackedPlayers.items():
             current_status, game_type = self.get_status(uuid)
