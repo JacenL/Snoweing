@@ -118,7 +118,7 @@ class HypixelPlayerCog(commands.Cog):
     @commands.command()
     async def track(self, ctx, ign: str):
         uuid, username = self.get_uuid(ign)
-        rank, hexColor = self.get_rank(uuid)
+        rank, _ = self.get_rank(uuid)
         if uuid:
             if uuid not in self.trackedPlayers:
                 online_status, game_type = self.get_status(uuid)
@@ -143,7 +143,7 @@ class HypixelPlayerCog(commands.Cog):
     @commands.command()
     async def untrack(self, ctx, ign: str):
         uuid, username = self.get_uuid(ign)
-        rank, hexColor = self.get_rank(uuid)
+        rank, _ = self.get_rank(uuid)
         if uuid and uuid in self.trackedPlayers:
             del self.trackedPlayers[uuid]
             self.dailyPlaytime.pop(uuid, None)
@@ -162,7 +162,7 @@ class HypixelPlayerCog(commands.Cog):
         channel = self.bot.get_channel(self.channelID)
         for player in self.autoTrackedPlayers:
             uuid, username = self.get_uuid(player)
-            rank, hexColor = self.get_rank(uuid)
+            rank, _ = self.get_rank(uuid)
             if uuid and uuid not in self.trackedPlayers:
                 online_status, game_type = self.get_status(uuid)
                 if online_status is not None:
@@ -177,7 +177,7 @@ class HypixelPlayerCog(commands.Cog):
     @commands.command(aliases=['pt'])
     async def playtime(self, ctx, ign: str):
         uuid, username = self.get_uuid(ign)
-        rank, hexColor = self.get_rank(uuid)
+        rank, _ = self.get_rank(uuid)
         if uuid in self.dailyPlaytime and self.dailyPlaytime[uuid]['currentDay'] == datetime.date.today():
             total_seconds = self.dailyPlaytime[uuid]['currentPlaytime']
             hours = int(total_seconds // 3600)
