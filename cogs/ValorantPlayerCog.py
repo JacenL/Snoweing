@@ -19,6 +19,8 @@ class ValorantPlayerCog(commands.Cog):
         )
         data = response.json()
         matches = data["data"]
+        if not matches:
+            return None
         match = matches[0]
         map = match["metadata"]["map"]
         mode = match["metadata"]["mode"]
@@ -29,7 +31,6 @@ class ValorantPlayerCog(commands.Cog):
                 pt = player["session_playtime"]["milliseconds"]
                 # minutes=int((pt_ms/(1000*60))%60)
                 # seconds=int((pt_ms/1000)%60)
-                team = player["team"]
                 kills = player["stats"]["kills"]
                 deaths = player["stats"]["deaths"]
                 assists = player["stats"]["assists"]
@@ -42,29 +43,45 @@ class ValorantPlayerCog(commands.Cog):
                 if rounds != 0:
                     acs = player["stats"]["score"] / rounds
 
-                team = player.get("team")
+                team = player["team"]
                 teams = match["teams"]
                 result = None
+                score = "N/A"
                 if team == "Red":
                     result = teams["Red"]["has_won"]
+                    score = f"{teams['Red']['rounds_won']} - {teams['Blue']['rounds_won']}"
                 elif team == "Blue":
                     result = teams["Blue"]["has_won"]
-                else:
-                    result = None
+                    score = f"{teams['Blue']['rounds_won']}-{teams['Red']['rounds_won']}"
 
-
-        
-        
-
+        key = f"{user}#{tag}"
+        info = {}
+        info[key] = {
+            "map": map,
+            "mode": mode,
+            "duration": duration,
+            "playtime": pt,
+            "kills": kills,
+            "deaths": deaths,
+            "assists": assists,
+            "acs": acs,
+            "score": score,
+            "won": result,
+            "headshots": headshots,
+            "bodyshots": bodyshots,
+            "legshots": legshots,
+            "playtime_ms": pt,
+        }
+        return info
 
     @tasks.loop(seconds=15)
-    async def checker (self):
-        for id in self.trackedPlayers:
+    async def checker(self):
+        for id in self.trackedPlayers: # Julian was here :P
             index = id.find("#")
             username = id[:index]
             tag = id[index + 1:]
-
-            
+            playerinfo = self.get_status(username, tag)
+            # get duration of game, send message into channel
             if data != self.trackedPlayers[id]["lastData"]:
                 channel = self.bot.get_channel(self.channelID)
                 await channel.send(f"New match data for {username}#{tag}: {data}")
