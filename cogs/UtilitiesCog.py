@@ -18,7 +18,27 @@ class UtilitiesCog(commands.Cog):
 
     @commands.command(aliases=['8ball'])
     async def eightball(self, ctx, *, question):
-        responses = ["No lol", "Jason sucks at coding, try again later", "Not happening", "Yeah sure.", "Get your serve in first before asking me", "Why u ask me", "Probably...", "idk, i dont have the imagination to think of more responses, help me out.", "It is certain", "It is decidedly so", "Without a doubt", "Yes definitely", "My reply is no", "Outlook not so good", "Don’t count on it", "As I see it, yes", "Outlook good", "Signs point to yes"]
+        responses = [
+            "No lol",
+            "Not happening",
+            "My reply is no",
+            "Outlook not so good",
+            "Don’t count on it",
+            "Why u ask me, but no",
+            "idk… so no",
+            "Hard pass.",
+            "Yeah… that’s a no.",
+
+            "Yeah sure.",
+            "Probably...",
+            "It is certain",
+            "It is decidedly so",
+            "Without a doubt",
+            "Yes definitely",
+            "As I see it, yes",
+            "Outlook good",
+            "Signs point to yes"
+            ]
         embed = discord.Embed(title=f"**Question: ** {question}\n**Answer: ** {random.choice(responses)}", color=discord.Color.blue())
         await ctx.reply(embed=embed)
 
@@ -120,6 +140,8 @@ class UtilitiesCog(commands.Cog):
                     result = "an **EVEN**"
                 elif oddeven == "2":
                     result = "a no school"
+                elif oddeven == "3":
+                    result = "an all-period"
                 elif oddeven == "5":
                     embed = discord.Embed(title="Day", description=f"{dateKey} is weekend.", color=discord.Color.green())
                 else:
