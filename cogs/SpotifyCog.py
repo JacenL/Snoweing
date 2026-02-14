@@ -1,40 +1,39 @@
 import discord
 from discord.ext import commands
 import spotipy
-from spotipy.oauth2 import SpotifyOAuth
+from spotipy.oauth2 import SpotifyClientCredentials
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
-    client_id=os.getenv("spotifyClientID"),
-    client_secret=os.getenv("spotifyClientSecret"),
-    redirect_uri="http://localhost:8888/callback",
-    scope="playlist-read-private"
-))
+sp = spotipy.Spotify(
+    auth_manager=SpotifyClientCredentials(
+        client_id=os.getenv("spotifyClientID"),
+        client_secret=os.getenv("spotifyClientSecret")
+    )
+)
 
 class SpotifyCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     def searchPlaylist(self, playlistSearch):
-        allPlaylistInfo = sp.search(q=f'playlist:{playlistSearch}', type='playlist', limit=50)
-        playlists = []
-        for song in allPlaylistInfo['playlists']['items']:
-            playlists.append(song)
-        searchInput = playlistSearch.split()
+        results = sp.search(
+            q=playlistSearch,
+            type='playlist',
+            limit=50
+        )
+
+        playlists = results['playlists']['items']
+        searchInput = playlistSearch.lower().split()
         matchingPlaylists = []
+
         for playlist in playlists:
-            playlistName = playlist['name']
-            found = True
-            for word in searchInput:
-                if word not in playlistName:
-                    found = False
-                    break
-            if found:
+            name = playlist['name'].lower()
+            if all(word in name for word in searchInput):
                 matchingPlaylists.append(playlist)
-                print(matchingPlaylists)
+
         return matchingPlaylists
 
     @commands.command()
