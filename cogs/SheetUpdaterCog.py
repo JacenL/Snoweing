@@ -56,11 +56,8 @@ class SheetUpdaterCog(commands.Cog):
         for item_id, cell in ITEMS_TO_UPDATE.items():
             if item_id in bazaar_data:
                 product_status = bazaar_data[item_id].get("quick_status", {})
-                sell_price = product_status.get("buyPrice", 0)
-
-                sell_price = (
-                    round(sell_price, 1) if sell_price % 1 != 0 else int(sell_price)
-                )
+                
+                sell_price = round(product_status.get("buyPrice", 0), 2)
 
                 cell_updates.append({"range": cell, "values": [[sell_price]]})
             else:

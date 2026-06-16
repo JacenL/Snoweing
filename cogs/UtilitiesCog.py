@@ -44,6 +44,7 @@ class UtilitiesCog(commands.Cog):
 
     @commands.command()
     @commands.has_guild_permissions(manage_messages=True)
+    @commands.cooldown(1, 2, commands.BucketType.channel)
     async def clear(self, ctx, amount = 0):
         if amount >= 5 and ctx.author.id != self.ownerID:
             amount = 5
