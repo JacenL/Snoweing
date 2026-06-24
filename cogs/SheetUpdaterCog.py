@@ -13,8 +13,9 @@ SHEET_TAB_NAME = "mochibear"
 ITEMS_TO_UPDATE = {
     "SHARD_MOCHIBEAR": "B1",
     "SHARD_BAMBULEAF": "B2",
-    "SHARD_PANDARAI": "B3",
-    "SHARD_GLACITE_WALKER": "B4",
+    "SHARD_GLACITE_WALKER": "B3",
+    "SHARD_PANDARAI": "B4",
+    "SHARD_BAMBLOOM":"B5",
 }
 
 class SheetUpdaterCog(commands.Cog):
