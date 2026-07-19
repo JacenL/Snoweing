@@ -21,8 +21,8 @@ ITEMS_TO_UPDATE = {
     "SHARD_PRAYING_MANTIS": ("B16", "buyPrice"),
     "SHARD_MINER_ZOMBIE": ("B17", "sellPrice"),
     "SHARD_INVISIBUG": ("B18", "sellPrice"),
-    "SHARD_TERMITE": ("B19", "sellPrice"),
-    "SHARD_CROPEETLE": ("B20", "sellPrice"),
+    "SHARD_TERMITE": ("B19", "buyPrice"),
+    "SHARD_CROPEETLE": ("B20", "buyPrice"),
 }
 
 class SheetUpdaterCog(commands.Cog):
