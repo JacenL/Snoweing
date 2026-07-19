@@ -11,18 +11,18 @@ SPREADSHEET_URL = (
 SHEET_TAB_NAME = "shards"
 
 ITEMS_TO_UPDATE = {
-    "SHARD_MOCHIBEAR": "B1",
-    "SHARD_BAMBULEAF": "B2",
-    "SHARD_GLACITE_WALKER": "B3",
-    "SHARD_PANDARAI": "B4",
-    "SHARD_BAMBLOOM":"B5",
-    "SHARD_CHILL": "B14",
-    "SHARD_PEST": "B15",
-    "SHARD_PRAYING_MANTIS": "B16",
-    "SHARD_MINER_ZOMBIE": "B17",
-    "SHARD_INVISIBUG": "B18",
-    "SHARD_TERMITE": "B19",
-    "SHARD_CROPEETLE": "B20",
+    "SHARD_MOCHIBEAR": ("B1", "buyPrice"),
+    "SHARD_BAMBULEAF": ("B2", "buyPrice"),
+    "SHARD_GLACITE_WALKER": ("B3", "buyPrice"),
+    "SHARD_PANDARAI": ("B4", "buyPrice"),
+    "SHARD_BAMBLOOM": ("B5", "buyPrice"),
+    "SHARD_CHILL": ("B14", "sellPrice"),
+    "SHARD_PEST": ("B15", "sellPrice"),
+    "SHARD_PRAYING_MANTIS": ("B16", "buyPrice"),
+    "SHARD_MINER_ZOMBIE": ("B17", "sellPrice"),
+    "SHARD_INVISIBUG": ("B18", "sellPrice"),
+    "SHARD_TERMITE": ("B19", "sellPrice"),
+    "SHARD_CROPEETLE": ("B20", "sellPrice"),
 }
 
 class SheetUpdaterCog(commands.Cog):
@@ -43,7 +43,6 @@ class SheetUpdaterCog(commands.Cog):
                 
             return data.get("products", {})
 
-
     def update_google_sheet(self, bazaar_data):
         scope = [
             "https://spreadsheets.google.com/feeds",
@@ -61,13 +60,13 @@ class SheetUpdaterCog(commands.Cog):
         cell_updates = []
         missing_items = []
 
-        for item_id, cell in ITEMS_TO_UPDATE.items():
+        for item_id, (cell, api_key) in ITEMS_TO_UPDATE.items():
             if item_id in bazaar_data:
                 product_status = bazaar_data[item_id].get("quick_status", {})
-                
-                sell_price = round(product_status.get("buyPrice", 0), 2)
 
-                cell_updates.append({"range": cell, "values": [[sell_price]]})
+                price = round(product_status.get(api_key, 0), 2)
+                
+                cell_updates.append({"range": cell, "values": [[price]]})
             else:
                 missing_items.append(item_id)
 
@@ -76,7 +75,7 @@ class SheetUpdaterCog(commands.Cog):
 
         if cell_updates:
             try:
-                sheet.batch_update(cell_updates)
+                sheet.batch_update(cell_updates, value_input_option='USER_ENTERED')
             except Exception as e:
                 raise RuntimeError(f"{e}")
     
