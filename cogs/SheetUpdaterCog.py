@@ -8,7 +8,7 @@ SPREADSHEET_URL = (
     "https://docs.google.com/spreadsheets/d/1IRzkAwYgIONjnoZU7WKvSHDMrvk8M23hJXS9Fc-CNLo/edit?usp=sharing"
 )
 
-SHEET_TAB_NAME = "mochibear"
+SHEET_TAB_NAME = "shards"
 
 ITEMS_TO_UPDATE = {
     "SHARD_MOCHIBEAR": "B1",
@@ -16,6 +16,13 @@ ITEMS_TO_UPDATE = {
     "SHARD_GLACITE_WALKER": "B3",
     "SHARD_PANDARAI": "B4",
     "SHARD_BAMBLOOM":"B5",
+    "SHARD_CHILL": "B14",
+    "SHARD_PEST": "B15",
+    "SHARD_PRAYING_MANTIS": "B16",
+    "SHARD_MINER_ZOMBIE": "B17",
+    "SHARD_INVISIBUG": "B18",
+    "SHARD_TERMITE": "B19",
+    "SHARD_CROPEETLE": "B20",
 }
 
 class SheetUpdaterCog(commands.Cog):
